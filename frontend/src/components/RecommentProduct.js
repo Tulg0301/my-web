@@ -9,8 +9,10 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import Link from "next/link";
 import addToCart from '@/helpers/addToCart'
+import { useDispatch } from "react-redux";
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch()
   return (
     <Link href={`/product-detail/${product._id}`} className="border relative rounded-lg p-4 shadow-lg bg-white flex flex-col items-center h-full">
       <div className="w-full max-w-xs h-40 flex items-center justify-center overflow-hidden">
@@ -27,7 +29,7 @@ const ProductCard = ({ product }) => {
         <span className="text-gray-500 line-through font-semibold text-xs sm:text-xs md:text-sm">{displayVNDCurrency(product.price)}</span>
       </div>
       <div className="mt-auto w-full">
-        <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition" onClick={(e)=>addToCart(e,product?._id)}>
+        <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition" onClick={(e)=>addToCart(e,product?._id,dispatch)}>
           Thêm vào giỏ
         </button>
       </div>

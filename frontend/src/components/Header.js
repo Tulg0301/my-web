@@ -100,7 +100,7 @@ const Header = () => {
                             <div className='absolute bg-blue-500 hover:bg-blue-600 top-11 h-fit px-2 py-2 shadow-lg rounded z-50'>
                                 <nav>
                                     {user?.role === ROLE.ADMIN && (
-                                        <Link href={"/adminpanel"} className='whitespace-nowrap block text-base text-white px-2 py-2'>
+                                        <Link href={"/adminpanel"} className='whitespace-nowrap block text-base text-white px-2'>
                                             Trang quản trị
                                         </Link>
                                     )}

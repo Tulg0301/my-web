@@ -1,5 +1,6 @@
 
 import { setCartProductCount } from "@/store/userSlice"
+import { useDispatch } from "react-redux"
 import { toast } from "react-toastify"
 
 const addToCart = async (e,id,dispatch)=>{
