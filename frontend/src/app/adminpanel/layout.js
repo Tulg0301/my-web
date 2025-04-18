@@ -66,7 +66,7 @@ const AdminLayout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="w-full h-full p-4">{children}</main>
+      <main className="w-full h-screen p-4 overflow-y-auto">{children}</main>
     </div>
   );
 };

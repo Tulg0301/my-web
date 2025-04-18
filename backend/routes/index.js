@@ -23,6 +23,7 @@ const getProducById = require('../controllers/product/getProductById')
 const updateAddToCartProduct = require('../controllers/user/updateAddToCartProduct')
 const delAddToCart = require('../controllers/user/delAddToCart')
 const searchProduct = require('../controllers/product/searchProduct')
+const deleteUserController = require('../controllers/user/deleteUser')
 
 router.post("/signup",useSignUpController)
 router.post("/signin",userSigninController)
@@ -46,6 +47,10 @@ router.post("/update-product",authToken,updateProductController)
 
 // Định nghĩa route DELETE /api/products/:id
 router.delete('/product/:id',authToken,deleteProductController);
+
+// Định nghĩa route DELETE /api/users/:id
+router.delete('/user/:id',authToken,deleteUserController);
+
 //Get product one
 router.get("/get-product-category",getCategoryProductOne)
 //Get product one

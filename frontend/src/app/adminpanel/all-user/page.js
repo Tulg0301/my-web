@@ -3,13 +3,15 @@ import SummaryApi from '@/common'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import moment from "moment"
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import ChangeUserRole from '@/components/ChangeUserRole'
 
 const page = () => {
 
   const[allUser, setAllUser] = useState([])
   const [openUpdateRole,setopenUpdataRole] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedDelete, setSelectedDelete] = useState(null);
   const [selectedUser, setSelectedUser] = useState({
     email : "",
     name : "" ,
@@ -17,6 +19,25 @@ const page = () => {
     _id : "",
   });
 
+  const handleDelete = async (id) => {
+      if (!id) return;
+      try {
+        const res = await fetch(`http://localhost:8080/api/user/${id}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+        const resData = await res.json();
+        if (resData.success) {
+          toast.success(resData.message);
+          setShowConfirm(false);
+          fetchAllUser(); 
+        } else {
+          toast.error("Lỗi khi xóa tài khoản.");
+        }
+      } catch (error) {
+        toast.error("Lỗi kết nối tới API");
+      }
+    };
 
   const fetchAllUser = async ()=>{
       const fetchData = await fetch(SummaryApi.allUser.url,{
@@ -32,7 +53,6 @@ const page = () => {
       if(dataRes.error){
         toast.error(dataRes.message)
       }
-      console.log(dataRes)
   }
   useEffect(()=>{
       fetchAllUser()
@@ -65,14 +85,41 @@ const page = () => {
                 </td>
                 <td className="px-4 py-3">{moment(el?.createdAt).format('DD-MM-YYYY')}</td>
                 <td className='px-4 py-3'>
-                  <button className='bg-green-200 p-2 rounded-full cursor-pointer hover:bg-green-400'
-                          onClick={() => {
-                            setopenUpdataRole(true),
-                            setSelectedUser(el)
-                          }}
-                  > 
-                    <MdEdit/>
-                  </button>
+                  <div className='flex items-center justify-start gap-2'>
+                    <button
+                      className={`p-2 rounded-full transition ${
+                        el?.role === 'ADMIN' 
+                          ? 'bg-gray-300 cursor-not-allowed' 
+                          : 'bg-green-200 hover:bg-green-400 cursor-pointer'
+                      }`}
+                      disabled={el?.role === 'ADMIN'}
+                      onClick={() => {
+                        if (el?.role !== 'ADMIN') {
+                          setopenUpdataRole(true);
+                          setSelectedUser(el);
+                        }
+                      }}
+                    > 
+                      <MdEdit />
+                    </button>
+
+                    <button 
+                      className={`p-2 rounded-full text-white shadow-md transition duration-300 ${
+                        el?.role === 'ADMIN'
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-red-500 hover:bg-red-600 cursor-pointer'
+                      }`}
+                      disabled={el?.role === 'ADMIN'}
+                      onClick={() => {
+                        if (el?.role !== 'ADMIN') {
+                          setShowConfirm(true);
+                          setSelectedDelete(el);
+                        }
+                      }}
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -89,13 +136,33 @@ const page = () => {
             role = {selectedUser.role}
             userId = {selectedUser._id}
             callFuntion={fetchAllUser}
-            
             />
           )
         }
-        
-</div>
 
+      {showConfirm && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-1/3">
+            <h2 className="text-xl font-semibold text-gray-800">Xác nhận xóa</h2>
+            <p className="mt-4 text-gray-600">Bạn có chắc chắn muốn xóa tài khoản này không?</p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button 
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition"
+                onClick={() => setShowConfirm(false)}
+              >
+                Hủy
+              </button>
+              <button 
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+                onClick={() => handleDelete(selectedDelete?._id)}
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+</div>
   )
 }
 
