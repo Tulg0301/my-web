@@ -24,55 +24,67 @@ const updateAddToCartProduct = require('../controllers/user/updateAddToCartProdu
 const delAddToCart = require('../controllers/user/delAddToCart')
 const searchProduct = require('../controllers/product/searchProduct')
 const deleteUserController = require('../controllers/user/deleteUser')
+const createOrderController = require('../controllers/order/postOder_OrderDetail')
+const getOrdersByUserId = require('../controllers/order/getOrderById')
+const getAllOrdersController = require('../controllers/order/getAllOrder')
+const updateOrderStatusController = require('../controllers/order/updateStatus')
 
-router.post("/signup",useSignUpController)
-router.post("/signin",userSigninController)
-router.get("/user-details",authToken,userDetailController)
-router.get("/userLogout",userLogout)
+router.post("/signup", useSignUpController)
+router.post("/signin", userSigninController)
+router.get("/user-details", authToken, userDetailController)
+router.get("/userLogout", userLogout)
 
 // admin panel
-router.get("/all-user",authToken,allUsers)
+router.get("/all-user", authToken, allUsers)
 
 //update user
-router.post("/update-user",authToken,updateUser)
+router.post("/update-user", authToken, updateUser)
 
 //upload Product
-router.post("/upload-product",authToken,UploadProductController)
+router.post("/upload-product", authToken, UploadProductController)
 
 //Get product
-router.get("/get-product",getProductController)
+router.get("/get-product", getProductController)
 
 //update product
-router.post("/update-product",authToken,updateProductController)
+router.post("/update-product", authToken, updateProductController)
 
 // Định nghĩa route DELETE /api/products/:id
-router.delete('/product/:id',authToken,deleteProductController);
+router.delete('/product/:id', authToken, deleteProductController);
 
 // Định nghĩa route DELETE /api/users/:id
-router.delete('/user/:id',authToken,deleteUserController);
+router.delete('/user/:id', authToken, deleteUserController);
 
 //Get product one
-router.get("/get-product-category",getCategoryProductOne)
+router.get("/get-product-category", getCategoryProductOne)
 //Get product one
-router.post("/category-product",getCategoryWiseProduct)
+router.post("/category-product", getCategoryWiseProduct)
 
 //Get product detail
-router.post("/product-details",getProductDetails)
+router.post("/product-details", getProductDetails)
 
 // add to cart 
 
-router.post("/addtocart",authToken,addToCartController)
+router.post("/addtocart", authToken, addToCartController)
 
-router.get("/countaddtocart",authToken,countAddToCart)
+router.get("/countaddtocart", authToken, countAddToCart)
 
-router.get("/view-cart-product",authToken,addToCartViewItem)
+router.get("/view-cart-product", authToken, addToCartViewItem)
 
-router.post("/getproductbyid",authToken,getProducById)
+router.post("/getproductbyid", authToken, getProducById)
 
-router.post("/update-cart-product",authToken,updateAddToCartProduct)
+router.post("/update-cart-product", authToken, updateAddToCartProduct)
 
-router.post("/delete-cart-product",authToken,delAddToCart)
+router.post("/delete-cart-product", authToken, delAddToCart)
 
-router.post("/search",searchProduct)
+router.post("/search", searchProduct)
+
+router.post('/create-order', authToken, createOrderController)
+
+router.get('/get-order-by-userid', authToken, getOrdersByUserId)
+
+router.get("/get-all-order", authToken, getAllOrdersController)
+
+router.post("/update-status-order", authToken, updateOrderStatusController)
 
 module.exports = router

@@ -8,7 +8,17 @@ import { HiMiniUserCircle } from "react-icons/hi2";
 const AdminLayout = ({ children }) => {
   const user = useSelector((state) => state?.user?.user);
   const userName = useMemo(() => user?.name ?? "", [user]);
-  const pathname = usePathname(); // Lấy đường dẫn hiện tại
+  const pathname = usePathname();
+
+  if (user?.role !== "ADMIN") {
+    return (
+      <div className="w-full h-screen flex items-center justify-center text-center">
+        <p className="text-xl text-red-600 font-semibold">
+
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[calc(100vh-120px)] md:flex hidden">
@@ -34,7 +44,6 @@ const AdminLayout = ({ children }) => {
         {/* Navigation */}
         <nav className="p-4 bg-white shadow-sm rounded-lg w-60">
           <ul className="flex flex-col space-y-2">
-            {/* All Users */}
             <li>
               <Link
                 href="/adminpanel/all-user"
@@ -47,8 +56,6 @@ const AdminLayout = ({ children }) => {
                 All Users
               </Link>
             </li>
-
-            {/* All Products */}
             <li>
               <Link
                 href="/adminpanel/all-product"
@@ -61,6 +68,16 @@ const AdminLayout = ({ children }) => {
                 All Products
               </Link>
             </li>
+            <Link
+                href="/adminpanel/all-order"
+                className={`block px-4 py-2 font-medium rounded-lg transition ${
+                  pathname === "/adminpanel/all-order"
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 hover:bg-blue-100 hover:text-blue-700"
+                }`}
+              >
+                All orders
+              </Link>
           </ul>
         </nav>
       </aside>

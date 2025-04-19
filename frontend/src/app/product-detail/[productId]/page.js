@@ -8,6 +8,7 @@ import { FaStarHalf } from "react-icons/fa";
 import RecommentProduct from '@/components/RecommentProduct'
 import addToCart from '@/helpers/addToCart';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
 
@@ -27,6 +28,8 @@ const page = () => {
 
     const [activeImage,setActiveImage] = useState(null)
     const params = useParams()
+
+    const router = useRouter();
     
     const fetchGetProductDetail = async () => {
         setLoading(true);
@@ -97,88 +100,95 @@ const page = () => {
 
            
             <div className="flex flex-col gap-2 w-full">
-    {/* Hiển thị skeleton loading nếu đang tải */}
-    {loading ? (
-        <div className=" h-6 bg-gray-300 animate-pulse rounded w-full"></div>
-    ) : (
-        <p className="bg-red-200 text-red-600 px-2 rounded-full w-fit">{data?.brandName}</p>
-    )}
+                {/* Hiển thị skeleton loading nếu đang tải */}
+                {loading ? (
+                    <div className=" h-6 bg-gray-300 animate-pulse rounded w-full"></div>
+                ) : (
+                    <p className="bg-red-200 text-red-600 px-2 rounded-full w-fit">{data?.brandName}</p>
+                )}
 
-    {loading ? (
-        <div className="w-full h-8 bg-gray-300 animate-pulse rounded"></div>
-    ) : (
-        <h2 className="text-2xl lg:text-4xl font-medium capitalize">{data?.productName}</h2>
-    )}
+                {loading ? (
+                    <div className="w-full h-8 bg-gray-300 animate-pulse rounded"></div>
+                ) : (
+                    <h2 className="text-2xl lg:text-4xl font-medium capitalize">{data?.productName}</h2>
+                )}
 
-    {loading ? (
-        <div className="w-24 h-6 bg-gray-300 animate-pulse rounded"></div>
-    ) : (
-        <p className="capitalize text-slate-400">{data?.category}</p>
-    )}
+                {loading ? (
+                    <div className="w-24 h-6 bg-gray-300 animate-pulse rounded"></div>
+                ) : (
+                    <p className="capitalize text-slate-400">{data?.category}</p>
+                )}
 
-    <div className="flex gap-1 items-center text-red-600">
-        {loading ? (
-            <div className="flex gap-1">
-                {Array(5).fill(null).map((_, index) => (
-                    <div key={index} className="w-6 h-6 bg-gray-300 animate-pulse rounded"></div>
-                ))}
+                <div className="flex gap-1 items-center text-red-600">
+                    {loading ? (
+                        <div className="flex gap-1">
+                            {Array(5).fill(null).map((_, index) => (
+                                <div key={index} className="w-6 h-6 bg-gray-300 animate-pulse rounded"></div>
+                            ))}
+                        </div>
+                    ) : (
+                        <>
+                            <FaStar />
+                            <FaStar />
+                            <FaStar />
+                            <FaStar />
+                            <FaStarHalf />
+                        </>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
+                    {loading ? (
+                        <>
+                            <div className="w-20 h-8 bg-gray-300 animate-pulse rounded"></div>
+                            <div className="w-20 h-6 bg-gray-300 animate-pulse rounded"></div>
+                        </>
+                    ) : (
+                        <>
+                            <p className="text-red-600">{displayVNDCurrency(data.sellingPrice)}</p>
+                            <p className="text-slate-400 line-through">{displayVNDCurrency(data.price)}</p>
+                        </>
+                    )}
+                </div>
+
+                <div className="flex item-center gap-3">
+                    {loading ? (
+                        <>
+                            <div className="w-[120px] h-10 bg-gray-300 animate-pulse rounded"></div>
+                            <div className="w-[120px] h-10 bg-gray-300 animate-pulse rounded"></div>
+                        </>
+                    ) : (
+                        <>
+                            <button className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition min-w-[120px]"
+                                    onClick={(e)=>{
+                                        addToCart(e,data?._id,dispatch)
+                                        router.push('/cart');    
+                                    }}
+                            >
+                                Mua ngay
+                            </button>
+                            <button className="border-2 border-blue-600 rounded px-3 py-1 min-w-[120px] hover:bg-blue-600 hover:text-white"
+                                    onClick={(e)=>{
+                                        addToCart(e,data?._id,dispatch)
+                                        }                                }
+                            >
+                                Thêm vào giỏ hàng
+                            </button>
+                        </>
+                    )}
+                </div>
+
+                <div>
+                    {loading ? (
+                        <div className="w-full h-8 bg-gray-300 animate-pulse rounded"></div>
+                    ) : (
+                        <>
+                            <p className="text-slate-600 font-medium my-1">Thông tin sản phẩm :</p>
+                            <p className='text-justify'>{data.description}</p>
+                        </>
+                    )}
+                </div>
             </div>
-        ) : (
-            <>
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStarHalf />
-            </>
-        )}
-    </div>
-
-    <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
-        {loading ? (
-            <>
-                <div className="w-20 h-8 bg-gray-300 animate-pulse rounded"></div>
-                <div className="w-20 h-6 bg-gray-300 animate-pulse rounded"></div>
-            </>
-        ) : (
-            <>
-                <p className="text-red-600">{displayVNDCurrency(data.sellingPrice)}</p>
-                <p className="text-slate-400 line-through">{displayVNDCurrency(data.price)}</p>
-            </>
-        )}
-    </div>
-
-    <div className="flex item-center gap-3">
-        {loading ? (
-            <>
-                <div className="w-[120px] h-10 bg-gray-300 animate-pulse rounded"></div>
-                <div className="w-[120px] h-10 bg-gray-300 animate-pulse rounded"></div>
-            </>
-        ) : (
-            <>
-                <button className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition min-w-[120px]">
-                    Mua ngay
-                </button>
-                <button className="border-2 border-blue-600 rounded px-3 py-1 min-w-[120px] hover:bg-blue-600 hover:text-white"
-                        onClick={(e)=>addToCart(e,data?._id,dispatch)}
-                >
-                    Thêm vào giỏ hàng
-                </button>
-            </>
-        )}
-    </div>
-
-    <div>
-        {loading ? (
-            <div className="w-full h-8 bg-gray-300 animate-pulse rounded"></div>
-        ) : (
-            <>
-                <p className="text-slate-600 font-medium my-1">Thông tin sản phẩm :</p>
-                <p className='text-justify'>{data.description}</p>
-            </>
-        )}
-    </div>
-</div>
 
 
         </div>

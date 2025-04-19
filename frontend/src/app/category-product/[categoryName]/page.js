@@ -18,7 +18,6 @@ const page = () => {
       }
       return null
     }).filter(el=>el)
-    console.log(arrCategory)
       const fetchProduct = async () => {
         try {
           setLoading(true)
